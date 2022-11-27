@@ -117,3 +117,103 @@ app.post(`/addStudent`, (req, res) => {
     }
 });
 
+app.post(`/editStudentById`, async (req, res) => {
+    try{
+        let student = await Student.updateOne({_id: req.body.id}, 
+            {
+                fname: req.body.fname
+            }, {upsert: true})
+
+        if (student) {
+            return res.status(200).json("Student Updated");
+            
+        } 
+        else {
+            return res.status(200).json("Student not Found or Changed...")            
+        }
+    }
+    catch{
+        return res.status(500).json("Connection ERROR...")
+    }
+});
+
+
+app.post(`/editStudentByFname`, async (req, res) => {
+    try{
+        let student = await Student.updateOne({fname: req.body.fname}, 
+            {
+                fname: req.body.fname,
+                lname: req.body.lname
+            }, {upsert: true})
+
+        if (student) {
+            return res.status(200).json("Student Updated");
+            
+        } 
+        else {
+            return res.status(200).json("Student not Found or Changed...")            
+        }
+    }
+    catch{
+        return res.status(500).json("Connection ERROR...")
+    }
+});
+
+
+app.post(`/editCourseByCourseName`, async (req, res) => {
+    try{
+        course = await Course.updateOne({courseName: req.body.courseName}, 
+        {
+        courseInstructor: req.body.courseInstructor
+        }, {upsert: true})
+
+        if (course) {
+            return res.status(200).json("Course Updated");
+            
+        } 
+        else {
+            return res.status(200).json("Course not Found or Changed...")            
+        }
+    }
+    catch{
+        return res.status(500).json("Connection ERROR...")
+    }
+});
+
+
+app.post(`/deleteCourseById`, async (req, res) => {
+    try{
+        let course = await Course.findOne({_id: req.body.id})
+
+        if (course) {
+            await Course.deleteOne({_id: req.body.id})
+            return res.status(200).json("Course not Deleted...")
+            
+        } 
+        else {
+            return res.status(200).json("Course not Found...")            
+        }
+    }
+    catch{
+        return res.status(500).json("Connection ERROR...")
+    }
+});
+
+
+app.post(`/removeStudentFromClasses`, async (req, res) => {
+    try{
+        let student = await Student.findOne({studentID: req.body.studentID})
+
+        if (student) {
+            await Student.deleteOne({studentID: req.body.studentID})
+            return res.status(200).json("Course not Deleted...")
+            
+        } 
+        else {
+            return res.status(200).json("Course not Found...")            
+        }
+    }
+    catch{
+        return res.status(500).json("Connection ERROR...")
+    }
+});
